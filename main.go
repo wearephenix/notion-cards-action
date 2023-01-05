@@ -51,7 +51,8 @@ func extractNotionLink(body string) string {
   results := markdownRegex.FindAllStringSubmatch(body, -1)
   
   if len(results) < 1 {
-    log.Fatalf("No Notion URL was found")
+    mft.Println("No Notion URL was found")
+    return nil
   } else if len(results) >= 1 {
     fmt.Println("First URL matched was:", results[0][0])
   }
@@ -104,7 +105,7 @@ func main() {
 
   path := os.Getenv(string(GitHubEventPath))
   if _, err := os.Stat(path); os.IsNotExist(err) {
-    fmt.Println(path, "noes not exists")
+    fmt.Println(path, "does not exists")
   }
 
   data, err := ioutil.ReadFile(path)
@@ -123,6 +124,8 @@ func main() {
   check(err)
 
   url := extractNotionLink(body)
-  pageId := getIdFromUrl(url)
-  updateCard(pageId, key, value)
+  if url != nil {
+    pageId := getIdFromUrl(url)
+    updateCard(pageId, key, value)
+  }
 }
