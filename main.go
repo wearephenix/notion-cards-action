@@ -52,7 +52,7 @@ func extractNotionLink(body string) string {
   
   if len(results) < 1 {
     mft.Println("No Notion URL was found")
-    return nil
+    return ""
   } else if len(results) >= 1 {
     fmt.Println("First URL matched was:", results[0][0])
   }
@@ -124,7 +124,7 @@ func main() {
   check(err)
 
   url := extractNotionLink(body)
-  if url != nil {
+  if url != "" {
     pageId := getIdFromUrl(url)
     updateCard(pageId, key, value)
   }
