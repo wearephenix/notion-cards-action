@@ -50,7 +50,7 @@ func extractNotionLink(body string) string {
 	results := markdownRegex.FindAllStringSubmatch(body, -1)
 
 	if len(results) < 1 {
-		mft.Println("No Notion URL was found")
+		fmt.Println("No Notion URL was found")
 		return ""
 	} else if len(results) >= 1 {
 		fmt.Println("First URL matched was:", results[0][0])
