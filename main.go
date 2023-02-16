@@ -40,9 +40,12 @@ const (
 	CardStatusReleased   CardStatus = "Released"
 )
 
-// Extracts last 32 digits
+// Extracts last 32 digits and ignore GET parameters
 func getIdFromUrl(page string) string {
-	return page[len(page)-32:]
+	markdownRegex := regexp.MustCompile(`(https?:\/\/)?(www\.notion\.so|notion\.so)(.*)\?\/?[^(\s)]+`)
+	results := markdownRegex.FindAllStringSubmatch(body, -1)
+	path := results[0][3]
+	fmt.Println(path[len(path)-32:])
 }
 
 func extractNotionLink(body string) string {
