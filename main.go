@@ -82,12 +82,6 @@ func updateCard(pageId string, key string, value string) {
 	params := notion.UpdatePageParams{DatabasePageProperties: databasePageProperties}
 	page, err := notionClient.UpdatePage(context.Background(), pageId, params)
 	check(err)
-
-	properties := page.Properties.(notion.DatabasePageProperties)
-	status := properties[key].Select.Name
-	title := properties["Name"].Title[0].Text.Content
-
-	fmt.Println("\""+title+"\"", "successfully updated to:", status)
 }
 
 func valueFromEvent(merged bool, closed bool) (string, error) {
