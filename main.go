@@ -75,7 +75,7 @@ func inputFromEnv(input GithubEnvironmentVariable) string {
 func updateCard(pageId string, key string, value string) {
 	notionClient := notion.NewClient(os.Getenv(string(NotionKey)))
 
-	valueToUpdate := notion.DatabasePageProperty{Select: &notion.SelectOptions{Name: value}}
+	valueToUpdate := notion.DatabasePageProperty{Select: &notion.SelectOptions{Status: value}}
 
 	databasePageProperties := &notion.DatabasePageProperties{key: valueToUpdate}
 
