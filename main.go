@@ -80,7 +80,7 @@ func updateCard(pageId string, key string, value string) {
 	databasePageProperties := notion.DatabasePageProperties{key: valueToUpdate}
 
 	params := notion.UpdatePageParams{DatabasePageProperties: databasePageProperties}
-	page, err := notionClient.UpdatePage(context.Background(), pageId, params)
+	_, err := notionClient.UpdatePage(context.Background(), pageId, params)
 	check(err)
 }
 
