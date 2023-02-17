@@ -77,10 +77,10 @@ func updateCard(pageId string, key string, value string) {
 
 	valueToUpdate := notion.DatabasePageProperty{Status: &notion.SelectOptions{Name: value}}
 
-	databasePageProperties := &notion.DatabasePageProperties{key: valueToUpdate}
+	databasePageProperties := notion.DatabasePageProperties{key: valueToUpdate}
 
 	params := notion.UpdatePageParams{DatabasePageProperties: databasePageProperties}
-	page, err := notionClient.UpdatePageProps(context.Background(), pageId, params)
+	page, err := notionClient.UpdatePage(context.Background(), pageId, params)
 	check(err)
 
 	properties := page.Properties.(notion.DatabasePageProperties)
