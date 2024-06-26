@@ -44,6 +44,12 @@ const (
 func getIdFromUrl(page string) string {
 	markdownRegex := regexp.MustCompile(`(https?:\/\/)?(www\.notion\.so|notion\.so)(.*)\?\/?[^(\s)]+`)
 	results := markdownRegex.FindAllStringSubmatch(page, -1)
+	// if no match, return empty string
+	if len(results) < 1 || len(results[0]) < 3{
+		fmt.Println("No Notion ID was found")
+		return ""
+	}
+
 	path := results[0][3]
 	return path[len(path)-32:]
 }
@@ -122,6 +128,8 @@ func main() {
 	url := extractNotionLink(body)
 	if url != "" {
 		pageId := getIdFromUrl(url)
-		updateCard(pageId, key, value)
+		if pageId != "" {
+			updateCard(pageId, key, value)
+		}
 	}
 }
