@@ -54,18 +54,17 @@ func getIdFromUrl(page string) string {
 	return path[len(path)-32:]
 }
 
-func extractNotionLink(body string) string {
+func extractNotionLink(body string) []string {
 	markdownRegex := regexp.MustCompile(`(https?://)?(www\.notion\.so|notion\.so)/?[^(\s)]+`)
 	results := markdownRegex.FindAllStringSubmatch(body, -1)
 
 	if len(results) < 1 {
-		fmt.Println("No Notion URL was found")
-		return ""
-	} else if len(results) >= 1 {
-		fmt.Println("First URL matched was:", results[0][0])
-	}
+    	fmt.Println("No Notion URLs were found")
+    	return []string{}
+   	}
 
-	return results[0][0]
+    fmt.Println("URLs matched:", results)
+   	return results
 }
 
 func check(err error) {
@@ -125,11 +124,13 @@ func main() {
 	value, err := valueFromEvent(merged, closed)
 	check(err)
 
-	url := extractNotionLink(body)
-	if url != "" {
-		pageId := getIdFromUrl(url)
-		if pageId != "" {
-			updateCard(pageId, key, value)
-		}
-	}
+    urls := extractNotionLinks(body)
+    for _, url := range urls {
+        if url != "" {
+            pageId := getIdFromUrl(url)
+            if pageId != "" {
+                updateCard(pageId, key, value)
+            }
+        }
+    }
 }
