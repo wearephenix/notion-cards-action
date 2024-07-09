@@ -63,7 +63,7 @@ func extractNotionLinks(body string) []string {
     	return []string{}
    	}
 
-    fmt.Println("URLs matched:", results)
+        fmt.Println("URLs matched:", results)
    	return results
 }
 
