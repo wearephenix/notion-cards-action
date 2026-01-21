@@ -40,22 +40,22 @@ const (
 	CardStatusReleased   CardStatus = "Released"
 )
 
-// Extracts last 32 digits and ignore GET parameters
+// Extracts last 32 digits and ignore query string parameters
 func getIdFromUrl(page string) string {
-	markdownRegex := regexp.MustCompile(`(https?:\/\/)?(www\.notion\.so|notion\.so)(.*)\?\/?[^(\s)]+`)
+	markdownRegex := regexp.MustCompile(`(https?://)?(www\.)?(notion.so)(.*)([a-f0-9]{32})(?:\?|$)`)
 	results := markdownRegex.FindAllStringSubmatch(page, -1)
 	// if no match, return empty string
-	if len(results) < 1 || len(results[0]) < 3{
+	if len(results) < 1 || len(results[0]) < 5{
 		fmt.Println("No Notion ID was found")
 		return ""
 	}
 
-	path := results[0][3]
+	path := results[0][5]
 	return path[len(path)-32:]
 }
 
 func extractNotionLinks(body string) []string {
-	markdownRegex := regexp.MustCompile(`(https?://)?(www\.notion\.so|notion\.so)/?[^(\s)]+`)
+	markdownRegex := regexp.MustCompile(`(https?://)?(www\.)?(notion.so)(.*)([a-f0-9]{32})(?:\?|$)`)
 	results := markdownRegex.FindAllString(body, -1)
 
 	if len(results) < 1 {
