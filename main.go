@@ -55,7 +55,7 @@ func getIdFromUrl(page string) string {
 }
 
 func extractNotionLinks(body string) []string {
-	markdownRegex := regexp.MustCompile(`(https?://)?(www\.)?(notion.so)(.*)([a-f0-9]{32})(?:\?|$)`)
+	markdownRegex := regexp.MustCompile(`(https?:\/\/)?(www\.)?(notion\.so)(.*)([a-f0-9]{32})(?:\?|$|\s)`)
 	results := markdownRegex.FindAllString(body, -1)
 
 	if len(results) < 1 {
