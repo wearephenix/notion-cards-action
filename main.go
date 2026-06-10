@@ -42,20 +42,20 @@ const (
 
 // Extracts last 32 digits and ignore query string parameters
 func getIdFromUrl(page string) string {
-	markdownRegex := regexp.MustCompile(`(https?:\/\/)?(www\.)?(notion\.so)(.*)([a-f0-9]{32})(?:\?|$|\s|\))`)
+	markdownRegex := regexp.MustCompile(`(https?:\/\/)((?:app|www)\.notion\.(?:so|com))(?:\/p)?(.*)([a-f0-9]{32})(?:\?|$|\s|\))`)
 	results := markdownRegex.FindAllStringSubmatch(page, -1)
 	// if no match, return empty string
-	if len(results) < 1 || len(results[0]) < 5{
+	if len(results) < 1 || len(results[0]) < 5 {
 		fmt.Println("No Notion ID was found")
 		return ""
 	}
 
-	path := results[0][5]
+	path := results[0][4]
 	return path[len(path)-32:]
 }
 
 func extractNotionLinks(body string) []string {
-	markdownRegex := regexp.MustCompile(`(https?:\/\/)?(www\.)?(notion\.so)(.*)([a-f0-9]{32})(?:\?|$|\s|\))`)
+	markdownRegex := regexp.MustCompile(`(https?:\/\/)((?:app|www)\.notion\.(?:so|com))(?:\/p)?(.*)([a-f0-9]{32})(?:\?|$|\s|\))`)
 	results := markdownRegex.FindAllString(body, -1)
 
 	if len(results) < 1 {

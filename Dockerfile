@@ -1,4 +1,17 @@
-FROM golang:alpine as builder
+FROM golang:1.23-alpine3.20 AS builder
+
+RUN apk add --no-cache git
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o main main.go
+
+FROM alpine:3.20
 
 LABEL "com.github.actions.name"="Notion Card Updater"
 LABEL "com.github.actions.description"="Updates a Notion card based on events and inputs using the Notion API"
@@ -9,23 +22,12 @@ LABEL "repository"="https://github.com/zant/notion-cards-action/"
 LABEL "homepage"="https://github.com/zant/notion-cards-action/README.md"
 LABEL "maintainer"="zant <hey@zant.xyz>"
 
-RUN apk update && apk upgrade && \
-                apk add --no-cache git
+RUN apk --no-cache add ca-certificates && \
+    addgroup -S appgroup && adduser -S appuser -G appgroup
 
-RUN mkdir /app
 WORKDIR /app
+COPY --from=builder /app/main .
 
-COPY . .
-
-RUN go mod download
-RUN GOOS=linux go build main.go
-
-FROM alpine:latest
-
-RUN apk --no-cache add ca-certificates
-
-RUN mkdir /app
-WORKDIR /app
-COPY --from=builder /app .
+USER appuser
 
 ENTRYPOINT ["/app/main"]
